@@ -1,2 +1,5 @@
-# comparador-financiero-argentina
-Comparador gratuito: plazo fijo vs dólar vs inflación en Argentina
+# Comparador Financiero Argentina
+
+Herramienta gratuita para comparar plazo fijo vs dólar blue ajustado por inflación.
+
+https://calculapesos.github.io/comparador-financiero-argentina
