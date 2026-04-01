@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://calculapesos.github.io/comparador-financiero-argentina/sitemap.xml
