@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparador: Plazo Fijo vs Dólar vs Inflación — Argentina</title>
+  <meta name="description" content="Calculadora gratuita para comparar si conviene más poner plata en plazo fijo o comprar dólares en Argentina. Resultados en tiempo real ajustados por inflación.">
+  <meta name="keywords" content="plazo fijo argentina, dolar blue hoy, calculadora plazo fijo, conviene comprar dolares, inflacion argentina, comparador financiero argentina">
+  <meta name="author" content="ComparadorAR">
+  <meta property="og:title" content="¿Plazo fijo o dólar? Calculá cuánto ganás en Argentina">
+  <meta property="og:description" content="Herramienta gratuita para comparar rendimiento real de plazo fijo vs dólar blue ajustado por inflación.">
+  <meta property="og:type" content="website">
+
+  <!-- Google AdSense — reemplazá ca-pub-XXXXXXXXXXXXXXXX con tu ID real -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f9f8f6;
+      --surface: #ffffff;
+      --border: rgba(0,0,0,0.1);
+      --border-strong: rgba(0,0,0,0.18);
+      --text: #1a1a18;
+      --text-secondary: #5f5e5a;
+      --text-tertiary: #888780;
+      --teal: #1D9E75;
+      --teal-light: #E1F5EE;
+      --teal-dark: #0F6E56;
+      --blue: #185FA5;
+      --blue-light: #E6F1FB;
+      --green: #3B6D11;
+      --green-light: #EAF3DE;
+      --red: #A32D2D;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1a;
+        --surface: #262624;
+        --border: rgba(255,255,255,0.1);
+        --border-strong: rgba(255,255,255,0.2);
+        --text: #f0ede8;
+        --text-secondary: #b4b2a9;
+        --text-tertiary: #888780;
+        --teal-light: #04342C;
+        --blue-light: #042C53;
+        --green-light: #173404;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border);
+      padding: 1.25rem 1.5rem;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Ad slot */
+    .ad-slot {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .input-row label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      min-width: 200px;
+    }
+
+    .input-row input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      background: var(--border-strong);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .input-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+      border: 2px solid var(--surface);
+      box-shadow: 0 0 0 1px var(--border-strong);
+    }
+
+    .input-row .val {
+      font-size: 14px;
+      font-weight: 500;
+      min-width: 80px;
+      text-align: right;
+      color: var(--text);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+    }
+
+    .result-card.winner {
+      border: 2px solid var(--teal);
+      background: var(--teal-light);
+    }
+
+    .result-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 10px;
+      border-radius: var(--radius-md);
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      margin-bottom: 8px;
+      border: 0.5px solid var(--teal);
+    }
+
+    .result-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .result-value {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .result-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .result-pct {
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+
+    .pos { color: var(--teal-dark); }
+    .neg { color: var(--red); }
+
+    .divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 240px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .chart-legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .info-item {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+    }
+
+    .info-item-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-bottom: 4px;
+    }
+
+    .info-item-value {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .disclaimer {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      padding: 2rem 1.5rem;
+      border-top: 0.5px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .input-row { flex-wrap: wrap; }
+      .input-row label { min-width: 100%; }
+      .input-row input[type="range"] { flex: 1; min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>¿Plazo fijo o dólar? Calculá tu rendimiento real</h1>
+  <p>Comparador gratuito ajustado por inflación para Argentina</p>
+</header>
+
+<div class="container">
+
+  <!-- AD SLOT TOP -->
+  <div class="ad-slot">
+    <!-- Pegá acá tu código de AdSense una vez aprobado -->
+    <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+    Publicidad
+  </div>
+
+  <!-- PARÁMETROS -->
+  <div class="card">
+    <div class="section-label">Parámetros de la simulación</div>
+
+    <div class="input-row">
+      <label>Capital inicial</label>
+      <input type="range" id="capital" min="10000" max="5000000" step="10000" value="500000">
+      <span class="val" id="capital-out">$500.000</span>
+    </div>
+    <div class="input-row">
+      <label>Plazo (meses)</label>
+      <input type="range" id="meses" min="1" max="24" step="1" value="6">
+      <span class="val" id="meses-out">6 meses</span>
+    </div>
+    <div class="input-row">
+      <label>TNA plazo fijo (%)</label>
+      <input type="range" id="tna" min="20" max="200" step="1" value="37">
+      <span class="val" id="tna-out">37%</span>
+    </div>
+    <div class="input-row">
+      <label>Inflación mensual estimada (%)</label>
+      <input type="range" id="inflacion" min="1" max="30" step="0.5" value="3">
+      <span class="val" id="inflacion-out">3%</span>
+    </div>
+    <div class="input-row">
+      <label>Suba del dólar blue mensual (%)</label>
+      <input type="range" id="dolar" min="0" max="25" step="0.5" value="2">
+      <span class="val" id="dolar-out">2%</span>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="card">
+    <div class="section-label">Resultado al vencimiento</div>
+    <div class="results-grid" id="results-grid"></div>
+
+    <div class="info-grid" id="info-grid"></div>
+  </div>
+
+  <!-- AD SLOT MEDIO -->
+  <div class="ad-slot">
+    <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+    Publicidad
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="card">
+    <div class="section-label">Comparativa visual</div>
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:#378ADD"></span>Plazo fijo nominal</span>
+      <span><span class="legend-dot" style="background:rgba(55,138,221,0.4)"></span>Plazo fijo real</span>
+      <span><span class="legend-dot" style="background:#639922"></span>Dólar nominal</span>
+      <span><span class="legend-dot" style="background:rgba(99,153,34,0.4)"></span>Dólar real</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="barChart"></canvas>
+    </div>
+
+    <div class="disclaimer">
+      Los valores son simulaciones basadas en los parámetros ingresados. No constituyen asesoramiento financiero. La inflación real y la cotización del dólar pueden diferir significativamente de las proyecciones. Consultá fuentes oficiales como el BCRA e INDEC para datos actualizados.
+    </div>
+  </div>
+
+  <!-- CONTENIDO SEO -->
+  <div class="card">
+    <div class="section-label">¿Cómo usar esta calculadora?</div>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.7; margin-bottom:1rem;">
+      Ingresá el monto que querés invertir, el plazo en meses, la tasa nominal anual (TNA) que te ofrece tu banco para el plazo fijo, y las estimaciones de inflación mensual y suba del dólar blue.
+    </p>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.7; margin-bottom:1rem;">
+      La calculadora muestra el valor final nominal (en pesos) y el valor real ajustado por inflación de cada opción. El valor real indica cuánto poder adquisitivo ganás o perdés realmente.
+    </p>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.7;">
+      Una TNA de 37% equivale a una tasa mensual de aproximadamente 3,08%. Si la inflación mensual es del 3%, el rendimiento real del plazo fijo es casi nulo. Usá los sliders para simular distintos escenarios.
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  ComparadorAR — Herramienta gratuita de simulación financiera para Argentina<br>
+  Los datos son estimativos. No constituyen asesoramiento de inversión.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const fmt = (n) => '$' + Math.round(n).toLocaleString('es-AR');
+  const fmtPct = (n) => (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+
+  let chart;
+
+  function calc() {
+    const capital = +document.getElementById('capital').value;
+    const meses = +document.getElementById('meses').value;
+    const tna = +document.getElementById('tna').value / 100;
+    const infMens = +document.getElementById('inflacion').value / 100;
+    const dolMens = +document.getElementById('dolar').value / 100;
+
+    const tmm = tna / 12;
+    const pfFinal = capital * Math.pow(1 + tmm, meses);
+    const pfReal = pfFinal / Math.pow(1 + infMens, meses);
+    const pfGain = ((pfFinal - capital) / capital) * 100;
+    const pfRealGain = ((pfReal - capital) / capital) * 100;
+
+    const dolFinal = capital * Math.pow(1 + dolMens, meses);
+    const dolReal = dolFinal / Math.pow(1 + infMens, meses);
+    const dolGain = ((dolFinal - capital) / capital) * 100;
+    const dolRealGain = ((dolReal - capital) / capital) * 100;
+
+    const infAcum = (Math.pow(1 + infMens, meses) - 1) * 100;
+    const tmmPct = (tmm * 100).toFixed(2);
+
+    const items = [
+      { label: 'Plazo fijo', final: pfFinal, gain: pfGain, realGain: pfRealGain },
+      { label: 'Dólar blue', final: dolFinal, gain: dolGain, realGain: dolRealGain },
+    ];
+
+    const winnerIdx = items[0].final >= items[1].final ? 0 : 1;
+
+    document.getElementById('results-grid').innerHTML = items.map((d, i) => `
+      <div class="result-card ${i === winnerIdx ? 'winner' : ''}">
+        ${i === winnerIdx ? '<div class="result-badge">Mejor opción</div>' : '<div style="height:22px"></div>'}
+        <div class="result-label">${d.label} · ${meses} mes${meses > 1 ? 'es' : ''}</div>
+        <div class="result-value">${fmt(d.final)}</div>
+        <div class="result-sub">Capital inicial: ${fmt(capital)}</div>
+        <div class="result-pct ${d.gain >= 0 ? 'pos' : 'neg'}">Nominal: ${fmtPct(d.gain)}</div>
+        <div class="result-pct ${d.realGain >= 0 ? 'pos' : 'neg'}">Real (vs inflación): ${fmtPct(d.realGain)}</div>
+      </div>
+    `).join('');
+
+    document.getElementById('info-grid').innerHTML = `
+      <div class="info-item">
+        <div class="info-item-label">Tasa mensual plazo fijo</div>
+        <div class="info-item-value">${tmmPct}%</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-label">Inflación acumulada</div>
+        <div class="info-item-value">${infAcum.toFixed(1)}%</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-label">Plazo seleccionado</div>
+        <div class="info-item-value">${meses} mes${meses > 1 ? 'es' : ''}</div>
+      </div>
+    `;
+
+    const barData = {
+      labels: ['Plazo fijo nominal', 'Plazo fijo real', 'Dólar nominal', 'Dólar real'],
+      datasets: [{
+        data: [Math.round(pfFinal), Math.round(pfReal), Math.round(dolFinal), Math.round(dolReal)],
+        backgroundColor: ['#378ADD', 'rgba(55,138,221,0.4)', '#639922', 'rgba(99,153,34,0.4)'],
+        borderRadius: 6,
+        barPercentage: 0.6,
+      }]
+    };
+
+    if (chart) {
+      chart.data = barData;
+      chart.update();
+    } else {
+      chart = new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: barData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ' ' + fmt(ctx.raw)
+              }
+            }
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: (v) => '$' + (v >= 1000000 ? (v/1000000).toFixed(1)+'M' : (v/1000).toFixed(0)+'k'),
+                font: { size: 11 },
+                color: '#888780'
+              },
+              grid: { color: 'rgba(128,128,128,0.08)' }
+            },
+            x: {
+              ticks: { font: { size: 11 }, color: '#888780' },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  function bind(id, outId) {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      const v = +el.value;
+      if (id === 'capital') document.getElementById(outId).textContent = '$' + v.toLocaleString('es-AR');
+      else if (id === 'meses') document.getElementById(outId).textContent = v + (v === 1 ? ' mes' : ' meses');
+      else document.getElementById(outId).textContent = v + '%';
+      calc();
+    });
+  }
+
+  bind('capital', 'capital-out');
+  bind('meses', 'meses-out');
+  bind('tna', 'tna-out');
+  bind('inflacion', 'inflacion-out');
+  bind('dolar', 'dolar-out');
+
+  calc();
+</script>
+
+</body>
+</html>
